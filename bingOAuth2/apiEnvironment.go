@@ -1,4 +1,4 @@
-package bingContent
+package bingOAuth2
 
 //The production environment.
 const EnvProduction = "Production"
