@@ -1,7 +1,7 @@
 package example
 
 import (
-	"bingContent/catalog"
+	"github.com/qinhong2015/bingContent/catalog"
 )
 
 func GetCatalog(id int) (*catalog.Catalog, error) {

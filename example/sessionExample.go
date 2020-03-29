@@ -1,8 +1,8 @@
 package example
 
 import (
-	"bingContent"
-	bingClient "bingContent/client"
+	"github.com/qinhong2015/bingContent"
+	bingClient "github.com/qinhong2015/bingContent/client"
 )
 
 func InitSessionWithRefreshToken() *bingContent.Session {

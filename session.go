@@ -1,8 +1,8 @@
 package bingContent
 
 import (
-	"bingContent/catalog"
-	bingClient "bingContent/client"
+	"github.com/qinhong2015/bingContent/catalog"
+	bingClient "github.com/qinhong2015/bingContent/client"
 )
 
 type Session struct {

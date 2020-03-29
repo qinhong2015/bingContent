@@ -1,9 +1,9 @@
 package catalog
 
 import (
-	"bingContent/client"
 	"encoding/json"
 	"fmt"
+	"github.com/qinhong2015/bingContent/client"
 	"net/http"
 )
 

@@ -1,9 +1,9 @@
 package client
 
 import (
-	"bingContent/bingOAuth2"
 	"bytes"
 	"fmt"
+	"github.com/qinhong2015/bingContent/bingOAuth2"
 	"golang.org/x/oauth2"
 	"io/ioutil"
 	"net/http"
