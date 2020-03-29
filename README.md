@@ -13,3 +13,6 @@ bingConfig.DeveloperToken = "developerToken"
 
 bingSession := bingContent.NewSession(bingConfig)
 ```
+
+example
+* [Catalog](https://github.com/qinhong2015/bingContent/blob/master/example/catalogExample.go)
