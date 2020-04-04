@@ -9,6 +9,8 @@ import (
 
 const ApiPath = "catalogs"
 
+const StatusPath = "status"
+
 type Catalog struct {
 	/**
 	An ID that uniquely identifies the catalog in the store.
@@ -37,6 +39,20 @@ type Catalog struct {
 	You may update this field.
 	*/
 	Name string `json:"name"`
+}
+
+type Status struct {
+	//The ID of the catalog being reported.
+	CatalogId int `json:"catalogId"`
+	//The number of offerings that passed validation and editorial review.
+	PublishedCount int `json:"publishedCount"`
+	//The number of offerings that failed validation and editorial review.
+	//This count indicates the number of rows in the body of the report
+	RejectedCount int `json:"rejectedCount"`
+	//The URL that you use to download the report.
+	//The object includes this field only when rejectedCount is greater than zero.
+	//The report is compressed and must be unzipped before you can read it.
+	RejectionReportUrl string `json:"rejectionReportUrl"`
 }
 
 type Collection struct {
@@ -73,6 +89,37 @@ func (r *Resource) Get(id int) (*Catalog, error) {
 	}
 
 	return catalog, nil
+}
+
+//The Status resource lets you get the status of product offers that you uploaded to the specified catalog.
+//After you upload offers to the catalog, they go through a validation and editorial review process.
+//This process can take up to a 36 hours.
+//The offer is included in the report only after it completes the review process.
+func (r *Resource) GetStatus(id int) (*Status, error) {
+	path := fmt.Sprintf("%s/%d/%s", ApiPath, id, StatusPath)
+	queries := map[string]string{
+		"alt": "json",
+	}
+
+	request := &client.BingRequest{
+		Path:    path,
+		Method:  http.MethodGet,
+		Queries: queries,
+	}
+
+	bodyBytes, err := r.Client.Request(request)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var status = new(Status)
+	err = json.Unmarshal(bodyBytes, &status)
+	if err != nil {
+		return nil, err
+	}
+
+	return status, nil
 }
 
 //Use to get a list of catalogs from the store.

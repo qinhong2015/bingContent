@@ -13,6 +13,15 @@ func GetCatalog(id int) (*catalog.Catalog, error) {
 	return catalogResource.Get(id)
 }
 
+func GetCatalogStatus(id int) (*catalog.Status, error) {
+	session := InitSessionWithRefreshToken()
+	catalogResource, err := session.GetCatalogResource()
+	if err != nil {
+		return nil, err
+	}
+	return catalogResource.GetStatus(id)
+}
+
 func GetCatalogs() (*catalog.Collection, error) {
 	session := InitSessionWithRefreshToken()
 	catalogResource, err := session.GetCatalogResource()
