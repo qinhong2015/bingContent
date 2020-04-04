@@ -1,3 +1,9 @@
+To install sdk
+
+```
+go get github.com/qinhong2015/bingContent
+```
+
 Init Session With RefreshToken
 
 ```

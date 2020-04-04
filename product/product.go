@@ -62,4 +62,7 @@ type Product struct {
 	//Custom label 0, which is used to filter products for Microsoft Shopping campaigns.
 	//The label is limited to 100 characters.
 	CustomLabel4 string `json:"customLabel4"`
+	//A description of the product. The description may not include promotional text.
+	//The description is limited to a maximum of 10,000 characters, and may include any Unicode characters.
+	Description string `json:"description"`
 }
