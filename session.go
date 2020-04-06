@@ -3,6 +3,7 @@ package bingContent
 import (
 	"github.com/qinhong2015/bingContent/catalog"
 	bingClient "github.com/qinhong2015/bingContent/client"
+	"github.com/qinhong2015/bingContent/product"
 )
 
 type Session struct {
@@ -32,6 +33,19 @@ func (s *Session) GetCatalogResource() (*catalog.Resource, error){
 	}
 
 	resource := &catalog.Resource{
+		Client: client,
+	}
+
+	return resource, nil
+}
+
+func (s *Session) GetProductResource() (*product.Resource, error){
+	client, err := s.GetClient()
+	if err != nil {
+		return nil, err
+	}
+
+	resource := &product.Resource{
 		Client: client,
 	}
 

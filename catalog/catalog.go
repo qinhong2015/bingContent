@@ -12,32 +12,22 @@ const ApiPath = "catalogs"
 const StatusPath = "status"
 
 type Catalog struct {
-	/**
-	An ID that uniquely identifies the catalog in the store.
-	This field is read-only; do not set this field.
-	*/
+	//An ID that uniquely identifies the catalog in the store.
+	//This field is read-only; do not set this field.
 	Id int `json:"id"`
-	/**
-	A Boolean value that determines whether the catalog is the store's default catalog.
-	Is true if the catalog is the store's default catalog; otherwise, false.
-	When you create a store, you get a default catalog that products are written to if you do not specify another catalog.
-	This field is read-only; do not set this field.
-	*/
+	//A Boolean value that determines whether the catalog is the store's default catalog.
+	//Is true if the catalog is the store's default catalog; otherwise, false.
+	//When you create a store, you get a default catalog that products are written to if you do not specify another catalog.
+	//This field is read-only; do not set this field.
 	IsDefault bool `json:"isDefault"`
-	/**
-	A Boolean value that determines whether Microsoft may publish products from the catalog.
-	Set to true if Microsoft may publish products from the catalog; otherwise, set it to false.
-	You may update this field.
-	*/
+	//A Boolean value that determines whether Microsoft may publish products from the catalog.
+	//Set to true if Microsoft may publish products from the catalog; otherwise, set it to false.
+	//You may update this field.
 	IsPublishingEnabled bool `json:"isPublishingEnabled"`
-	/**
-	The market where products in the catalog are published to. The following are the possible markets that you may specify.
-	*/
+	//The market where products in the catalog are published to. The following are the possible markets that you may specify.
 	Market string `json:"market"`
-	/**
-	The name of the store. The name may contain a maximum of 70 characters.
-	You may update this field.
-	*/
+	//The name of the store. The name may contain a maximum of 70 characters.
+	//You may update this field.
 	Name string `json:"name"`
 }
 
@@ -63,12 +53,27 @@ type Resource struct {
 	Client *client.BingClient
 }
 
+type Parameter struct {
+	//json or xml
+	Alt string
+}
+
+func (r *Resource) NewParameter() *Parameter {
+	p := new(Parameter)
+	p.Alt = "json"
+	return p
+}
+
+func (r *Resource) getQueries(p *Parameter) map[string]string{
+	queries := make(map[string]string)
+	queries["alt"] = p.Alt
+	return queries
+}
+
 //Use to get a catalog from the store.
-func (r *Resource) Get(id int) (*Catalog, error) {
+func (r *Resource) Get(id int, p *Parameter) (*Catalog, error) {
 	path := fmt.Sprintf("%s/%d", ApiPath, id)
-	queries := map[string]string{
-		"alt": "json",
-	}
+	queries := r.getQueries(p)
 
 	request := &client.BingRequest{
 		Path:    path,
@@ -95,11 +100,9 @@ func (r *Resource) Get(id int) (*Catalog, error) {
 //After you upload offers to the catalog, they go through a validation and editorial review process.
 //This process can take up to a 36 hours.
 //The offer is included in the report only after it completes the review process.
-func (r *Resource) GetStatus(id int) (*Status, error) {
+func (r *Resource) GetStatus(id int, p *Parameter) (*Status, error) {
 	path := fmt.Sprintf("%s/%d/%s", ApiPath, id, StatusPath)
-	queries := map[string]string{
-		"alt": "json",
-	}
+	queries := r.getQueries(p)
 
 	request := &client.BingRequest{
 		Path:    path,
@@ -123,10 +126,8 @@ func (r *Resource) GetStatus(id int) (*Status, error) {
 }
 
 //Use to get a list of catalogs from the store.
-func (r *Resource) GetAll() (*Collection, error) {
-	queries := map[string]string{
-		"alt": "json",
-	}
+func (r *Resource) GetAll(p *Parameter) (*Collection, error) {
+	queries := r.getQueries(p)
 
 	request := &client.BingRequest{
 		Path:    ApiPath,
@@ -151,10 +152,8 @@ func (r *Resource) GetAll() (*Collection, error) {
 
 //Use to add a catalog to the store. To add a catalog, its name must be unique.
 //You may add a maximum of 100 catalogs to a store.
-func (r *Resource) Create(catalog *Catalog) (*Catalog, error) {
-	queries := map[string]string{
-		"alt": "json",
-	}
+func (r *Resource) Create(catalog *Catalog, p *Parameter) (*Catalog, error) {
+	queries := r.getQueries(p)
 
 	create := struct {
 		IsPublishingEnabled bool `json:"isPublishingEnabled"`
@@ -195,7 +194,7 @@ func (r *Resource) Create(catalog *Catalog) (*Catalog, error) {
 
 //Use to update a catalog in the store.
 //The only fields you may update are the name and isPublishingEnabled fields, and you must specify both.
-func (r *Resource) Update(catalog *Catalog) (*Catalog, error) {
+func (r *Resource) Update(catalog *Catalog, p *Parameter) (*Catalog, error) {
 	if catalog.Id == 0 {
 		err := &client.InvalidArgumentError{
 			Message: "catalog id is required",
@@ -203,9 +202,7 @@ func (r *Resource) Update(catalog *Catalog) (*Catalog, error) {
 		return nil, err
 	}
 
-	queries := map[string]string{
-		"alt": "json",
-	}
+	queries := r.getQueries(p)
 
 	update := struct {
 		IsPublishingEnabled bool `json:"isPublishingEnabled"`
@@ -245,11 +242,9 @@ func (r *Resource) Update(catalog *Catalog) (*Catalog, error) {
 }
 
 //Use to delete a catalog from the store.
-func (r *Resource) Delete(id int) error {
+func (r *Resource) Delete(id int, p *Parameter) error {
 	path := fmt.Sprintf("%s/%d", ApiPath, id)
-	queries := map[string]string{
-		"alt": "json",
-	}
+	queries := r.getQueries(p)
 
 	request := &client.BingRequest{
 		Path:    path,

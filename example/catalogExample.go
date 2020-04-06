@@ -10,7 +10,7 @@ func GetCatalog(id int) (*catalog.Catalog, error) {
 	if err != nil {
 		return nil, err
 	}
-	return catalogResource.Get(id)
+	return catalogResource.Get(id, catalogResource.NewParameter())
 }
 
 func GetCatalogStatus(id int) (*catalog.Status, error) {
@@ -19,7 +19,7 @@ func GetCatalogStatus(id int) (*catalog.Status, error) {
 	if err != nil {
 		return nil, err
 	}
-	return catalogResource.GetStatus(id)
+	return catalogResource.GetStatus(id, catalogResource.NewParameter())
 }
 
 func GetCatalogs() (*catalog.Collection, error) {
@@ -28,16 +28,16 @@ func GetCatalogs() (*catalog.Collection, error) {
 	if err != nil {
 		return nil, err
 	}
-	return catalogResource.GetAll()
+	return catalogResource.GetAll(catalogResource.NewParameter())
 }
 
-func DeleteCatalog(id int) ( error) {
+func DeleteCatalog(id int) error {
 	session := InitSessionWithRefreshToken()
 	catalogResource, err := session.GetCatalogResource()
 	if err != nil {
 		return err
 	}
-	return catalogResource.Delete(id)
+	return catalogResource.Delete(id, catalogResource.NewParameter())
 }
 
 func CreateCatalog() (*catalog.Catalog, error) {
@@ -53,7 +53,7 @@ func CreateCatalog() (*catalog.Catalog, error) {
 		Name:                "Name",
 	}
 
-	return catalogResource.Create(c)
+	return catalogResource.Create(c, catalogResource.NewParameter())
 }
 
 func UpdateCatalog() (*catalog.Catalog, error) {
@@ -66,5 +66,5 @@ func UpdateCatalog() (*catalog.Catalog, error) {
 	c, _ := GetCatalog(1)
 	c.IsPublishingEnabled = false
 
-	return catalogResource.Create(c)
+	return catalogResource.Create(c, catalogResource.NewParameter())
 }
